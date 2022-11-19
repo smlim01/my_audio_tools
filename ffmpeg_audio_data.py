@@ -43,7 +43,7 @@ def main(args):
 
     # Prepare data_dict for multi processing
     data_dict_list = []
-    for idx, input_audio in input_audio_list:
+    for idx, input_audio in enumerate(input_audio_list):
         data_dict = dict()
         data_dict['input_path'] = input_audio
         data_dict['output_path'] = os.path.join(args.output_dir, 
@@ -64,14 +64,22 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='FFmpeg audio data')
-    parser.add_argument('input_dir', type=str, help='Input audio data directory')
-    parser.add_argument('output_dir', type=str, help='Output audio data directory')
-    parser.add_argument('--input-ext', type=str, default=".wav", help='Input audio extension')
-    parser.add_argument('--ext', type=str, default=".wav", help='Output audio extension')
-    parser.add_argument('--ac', type=int, default=1, help='Output audio num of channel')
-    parser.add_argument('--acodec', type=str, default="pcm_s16le", help='Output audio acodec')
-    parser.add_argument('--sr', type=int, help='Output audio sampling rate')
-    parser.add_argument('--worker', type=int, help='Number of workers', default=8)
+    parser.add_argument('input_dir', type=str, 
+                        help='Input audio data directory')
+    parser.add_argument('output_dir', type=str, 
+                        help='Output audio data directory')
+    parser.add_argument('--input-ext', type=str, default=".wav", 
+                        help='Input audio extension')
+    parser.add_argument('--ext', type=str, default=".wav", 
+                        help='Output audio extension')
+    parser.add_argument('--ac', type=int, default=1, 
+                        help='Output audio num of channel')
+    parser.add_argument('--acodec', type=str, default="pcm_s16le", 
+                        help='Output audio acodec')
+    parser.add_argument('--sr', type=int, 
+                        help='Output audio sampling rate')
+    parser.add_argument('--worker', type=int, default=8
+                        help='Number of workers')
     args = parser.parse_args()
     
     main(args)
