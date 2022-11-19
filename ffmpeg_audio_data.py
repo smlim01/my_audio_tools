@@ -78,7 +78,7 @@ if __name__ == "__main__":
                         help='Output audio acodec')
     parser.add_argument('--sr', type=int, 
                         help='Output audio sampling rate')
-    parser.add_argument('--worker', type=int, default=8
+    parser.add_argument('--worker', type=int, default=8,
                         help='Number of workers')
     args = parser.parse_args()
     
