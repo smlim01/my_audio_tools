@@ -58,7 +58,7 @@ def main(args):
 
     # Multi processing
     with Pool(args.worker) as p:
-        results = list(tqdm.tqdm(p.imap(ffmpeg_audio_data, data_dict_list)
+        results = list(tqdm(p.imap(ffmpeg_audio_data, data_dict_list)
             , total=len(data_dict_list)))
 
 
