@@ -24,6 +24,7 @@ def ffmpeg_audio_data(data_dict):
             ac=data_dict['ac'],
             ar=data_dict['sr']
         )
+        .global_args('-loglevel', 'quiet')
         .overwrite_output()
         .run()
     )
