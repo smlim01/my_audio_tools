@@ -22,7 +22,8 @@ def ffmpeg_audio_data(data_dict):
             data_dict['output_path'],
             acodec=data_dict['acodec'],
             ac=data_dict['ac'],
-            ar=data_dict['sr']
+            ar=data_dict['sr'],
+            af="aresample=resampler=soxr"
         )
         .global_args('-loglevel', 'quiet')
         .overwrite_output()
