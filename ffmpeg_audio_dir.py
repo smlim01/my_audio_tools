@@ -1,5 +1,7 @@
 import argparse
+import json
 import os
+from copy import deepcopy
 from functools import partial
 from multiprocessing import Pool
 
@@ -40,28 +42,40 @@ def search_input_audio(input_dir, input_ext='.wav'):
     return input_audio_list
 
 def main(args):
+    # Print input arguments
+    print("-"*20)
+    print(f"Input: {args.input_ext}")
+    print("-"*20)
+    print(f" > Resampling rate: {args.sr}")
+    print("-"*20)
+    print(f"Output: {args.ext}")
+    print(f" > output channel: {args.ac}")
+    print(f" > output codec: {args.acodec}")
+    print("-"*20)
+
     input_audio_list = search_input_audio(args.input_dir, input_ext=args.input_ext)
     print(f"Num of input audio: {len(input_audio_list)}")
 
     # Prepare data_dict for multi processing
     data_dict_list = []
     for idx, input_audio in enumerate(input_audio_list):
-        data_dict = dict()
+        data_dict = deepcopy(vars(args))
         data_dict['input_path'] = input_audio
         data_dict['output_path'] = os.path.join(args.output_dir, 
             os.path.splitext(
                 input_audio[len(args.input_dir):].strip(os.path.sep)
             )[0] + args.ext
         )
-        data_dict['ac'] = args.ac
-        data_dict['acodec'] = args.acodec
-        data_dict['sr'] = args.sr
         data_dict_list.append(data_dict)
 
     # Multi processing
     with Pool(args.worker) as p:
         results = list(tqdm(p.imap(ffmpeg_audio_dir, data_dict_list)
             , total=len(data_dict_list)))
+
+    # Save configs to output directory
+    with open(os.path.join(args.output_dir, "processing_config.json"), 'w') as f:
+        json.dump(vars(args), f, indent=4, ensure_ascii=False)
 
 
 if __name__ == "__main__":

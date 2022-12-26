@@ -1,6 +1,6 @@
 import argparse
+import json
 import os
-import sys
 from copy import deepcopy
 from functools import partial
 from multiprocessing import Pool
@@ -100,10 +100,18 @@ def main(args):
             p.imap(librosa_audio_dir, data_dict_list),
             total=len(data_dict_list)
         ))
-    results_npy = np.asarray(results)
-    results_sum = np.sum(results_npy, axis=0)
+
+    # Calculate trimmed audio ratio
+    results_sum = np.sum(np.asarray(results), axis=0)
+    trimmed_ratio = (1 - results_sum[1]/results_sum[0])*100
     if args.trim == True:
-        print(f"Total trimmed audio: {(1 - results_sum[1]/results_sum[0])*100:.1f}%")
+        print(f"Total trimmed audio: {trimmed_ratio:.1f}%")
+    
+    # Save configs to output directory
+    with open(os.path.join(args.output_dir, "processing_config.json"), 'w') as f:
+        config_dict = deepcopy(vars(args))
+        config_dict["trimmed_ratio"] = f"{trimmed_ratio:.1f}%"
+        json.dump(config_dict, f, indent=4, ensure_ascii=False)
 
 def str2bool(v):
     if isinstance(v, bool):
