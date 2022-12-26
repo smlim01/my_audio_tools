@@ -81,6 +81,7 @@ def main(args):
 
     input_audio_list = search_input_audio(args.input_dir, input_ext=args.input_ext)
     print(f"Num of input audio: {len(input_audio_list)}")
+    assert len(input_audio_list) > 0
 
     # Prepare data_dict for multi-processing
     data_dict_list = []
