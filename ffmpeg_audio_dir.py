@@ -7,7 +7,7 @@ import ffmpeg
 from tqdm import tqdm
 
 
-def ffmpeg_audio_data(data_dict):
+def ffmpeg_audio_dir(data_dict):
     os.makedirs(
         os.path.dirname(data_dict['output_path']), 
         exist_ok=True)
@@ -60,12 +60,12 @@ def main(args):
 
     # Multi processing
     with Pool(args.worker) as p:
-        results = list(tqdm(p.imap(ffmpeg_audio_data, data_dict_list)
+        results = list(tqdm(p.imap(ffmpeg_audio_dir, data_dict_list)
             , total=len(data_dict_list)))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='FFmpeg audio data')
+    parser = argparse.ArgumentParser(description='Resamplig audio data directory using FFmpeg')
     parser.add_argument('input_dir', type=str, 
                         help='Input audio data directory')
     parser.add_argument('output_dir', type=str, 
